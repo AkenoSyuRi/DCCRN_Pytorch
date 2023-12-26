@@ -1,0 +1,79 @@
+[meta]
+seed = 666
+use_amp = false
+num_workers = 16
+pin_memory = true
+num_epochs = 100
+batch_size = 64
+description = """[1225 dnsdrb][mydesk][test]
+1) 16k, win_len=512, win_inc=256;
+2) use sisdr loss;
+"""
+# set experiment dir.
+save_model_dir = "/mnt/c/AudioTest/model_test/2.in_model"
+experiment_name = "[mydesk][test]DCCRN_1225_sisdr_dnsdrb_half_16k"
+# set preload model
+preload_model_path = ""
+
+[dataset]
+samplerate = 16000
+duration = 10
+snr_range = [-5, 40, 1] # *_range: start, stop, step
+scale_range = [0.25, 0.99, 0.01]
+valid_sizes = [1024, 300, 1024] # valid size for: clean, noise, RIR
+clean_dir_list = [
+    "/mnt/c/AudioTest/dataset/train_data_32k/clean/dns_clean_32k_PadAndCut_10s",
+    "/mnt/c/AudioTest/dataset/train_data_32k/clean/NEW_AISHELL3_32k_PadAndCut_10s",
+    "/mnt/c/AudioTest/dataset/train_data_32k/clean/wedo_clean_32k_finetune",
+    "/mnt/c/AudioTest/dataset/train_data_32k/clean/anechoic_room_lzf_speech_augmented",
+]
+noise_dir_list = [
+    # "/mnt/c/AudioTest/dataset/train_data_32k/noise/dns_noise_fullband",
+    "/mnt/c/AudioTest/dataset/train_data_32k/noise/ESC-50",
+    # "/mnt/c/AudioTest/dataset/train_data_32k/noise/DEMAND_dataset_32k",
+    # "/mnt/c/AudioTest/dataset/train_data_32k/noise/youtube_air_conditioner_cut_200",
+    # "/mnt/c/AudioTest/dataset/train_data_32k/noise/desed_synth_soundbank_32k",
+    "/mnt/c/AudioTest/dataset/train_data_32k/noise/anechoic_chamber_lizhifeng_noise_cut",
+    "/mnt/c/AudioTest/dataset/train_data_32k/noise/lizhinan_noise1_cut",
+    "/mnt/c/AudioTest/dataset/train_data_32k/noise/meeting_room_noise_cut",
+]
+rir_dir_list = [
+    "/mnt/c/AudioTest/dataset/train_data_32k/rir/rir_gen_0.1_to_1.1_cnt_1w",
+    "/mnt/c/AudioTest/dataset/train_data_32k/rir/real_rir",
+    # "/mnt/c/AudioTest/dataset/train_data_32k/rir/wedo_rk_out_speedup_rir",
+]
+# test out dir
+test_out_wav_dir = "/mnt/c/AudioTest/out_wav"
+
+[model]
+path = "modules.dc_crn.DCCRN"
+[model.args]
+rnn_layers = 2
+rnn_units = 128
+win_len = 512
+win_inc = 256
+fft_len = 512
+win_type = "hamming"
+masking_mode = "E"
+use_clstm = false
+use_cbn = false
+kernel_size = 5
+kernel_num = [16, 32, 64, 128, 256, 256]
+
+[loss]
+method = "sisdr"
+# method = "snr"
+# method = "wSDR"
+
+[optimizer]
+lr = 1e-3
+# lr = 1e-4
+
+[scheduler]
+factor = 0.5
+patience = 2
+min_lr = 1e-5
+
+[trainer.args]
+clip_grad_norm_ornot = true
+clip_grad_norm_value = 3

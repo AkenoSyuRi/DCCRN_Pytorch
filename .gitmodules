@@ -1,0 +1,3 @@
+[submodule "tools/lzf_utils"]
+	path = tools/lzf_utils
+	url = git@github.com:AkenoSyuRi/lzf_utils.git

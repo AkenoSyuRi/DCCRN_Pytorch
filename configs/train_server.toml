@@ -1,0 +1,78 @@
+[meta]
+seed = 125
+use_amp = false
+num_workers = 14
+pin_memory = true
+num_epochs = 100
+batch_size = 128
+description = """[1224 dnsdrb][server][full]
+1) use rts 0.03 early 0.03 rir as target, add scheduler entry in configuration file;
+2) use mel spectrogram as feature input in stage 1;
+"""
+# set experiment dir.
+save_model_dir = "/home/featurize/train_output/models"
+experiment_name = "[server][full]DTLN_1224_snr_dnsdrb_quater_none_rts0.03_pre30ms_mel"
+# set preload model
+preload_model_path = ""
+
+[dataset]
+samplerate = 16000
+duration = 10
+snr_range = [-5, 40, 1] # *_range: start, stop, step
+scale_range = [0.20, 0.99, 0.01]
+valid_sizes = [1024, 300, 1024] # valid size for: clean, noise, RIR
+clean_dir_list = [
+    "/home/featurize/data/from_lzf/train_data_32k/clean/dns_clean_32k",
+    "/home/featurize/data/from_lzf/train_data_32k/clean/NEW_AISHELL3_data_cat",
+    "/home/featurize/data/from_lzf/train_data_32k/clean/wedo_clean_32k_finetune",
+    "/home/featurize/data/from_lzf/train_data_32k/clean/anechoic_room_lzf_speech_augmented",
+]
+noise_dir_list = [
+    # "/home/featurize/data/from_lzf/train_data_32k/noise/dns_noise_fullband",
+    "/home/featurize/data/from_lzf/train_data_32k/noise/ESC-50",
+    # "/home/featurize/data/from_lzf/train_data_32k/noise/DEMAND_dataset_32k",
+    # "/home/featurize/data/from_lzf/train_data_32k/noise/youtube_air_conditioner_cut_200",
+    # "/home/featurize/data/from_lzf/train_data_32k/noise/desed_synth_soundbank_32k",
+    "/home/featurize/data/from_lzf/train_data_32k/noise/anechoic_chamber_lizhifeng_noise_cut",
+    "/home/featurize/data/from_lzf/train_data_32k/noise/lizhinan_noise1_cut",
+    "/home/featurize/data/from_lzf/train_data_32k/noise/meeting_room_noise_cut",
+]
+rir_dir_list = [
+    "/home/featurize/data/from_lzf/train_data_32k/rir/rir_gen_0.1_to_1.1_cnt_1w",
+    "/home/featurize/data/from_lzf/train_data_32k/rir/real_rir",
+    # "/home/featurize/data/from_lzf/train_data_32k/rir/wedo_rk_out_speedup_rir",
+]
+# test out dir
+test_out_wav_dir = "/home/featurize/train_output/out_wav"
+
+[model]
+path = "modules.dc_crn.DCCRN"
+[model.args]
+rnn_layers = 2
+rnn_units = 128
+win_len = 1024
+win_inc = 512
+fft_len = 1024
+win_type = "hamming"
+masking_mode = "E"
+use_clstm = true
+use_cbn = false
+kernel_size = 5
+kernel_num = [16, 32, 64, 128, 256, 256]
+
+[loss]
+method = "snr"
+# method = "wSDR"
+
+[optimizer]
+lr = 1e-3
+# lr = 1e-4
+
+[scheduler]
+factor = 0.5
+patience = 2
+min_lr = 1e-5
+
+[trainer.args]
+clip_grad_norm_ornot = true
+clip_grad_norm_value = 3
