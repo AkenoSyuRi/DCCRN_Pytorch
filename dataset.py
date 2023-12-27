@@ -132,8 +132,8 @@ def get_rts_rir(
     sr,
     *,
     original_T60: float = 1.0,
-    target_T60=0.05,
-    direct_range=(-0.001, 0.08),
+    target_T60=0.15,
+    direct_range=(-0.001, 0.04),
 ):
     assert rir.ndim == 1, "rir must be a 1D array."
 
@@ -430,7 +430,7 @@ class Dataset_DNS(data.Dataset):
 
 
 if __name__ == "__main__":
-    config = toml.load("./configs/train_mydesk.toml")
+    config = toml.load("./configs/train_server.toml")
     seed = config["meta"]["seed"]
     torch.manual_seed(seed)
     np.random.seed(seed)

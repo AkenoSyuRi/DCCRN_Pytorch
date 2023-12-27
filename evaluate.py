@@ -50,10 +50,10 @@ if __name__ == "__main__":
         model_index_ranges,
         device,
         out_input,
-    ) = (512, 256, 16000, 21, "cpu", bool(0))
-    out_wav_base_dir = Path(r"/mnt/c/AudioTest/model_test/3.out_data/tmp")
+    ) = (512, 256, 16000, 20, "cpu", bool(0))
+    out_wav_base_dir = Path(r"/home/featurize/train_output/enhanced/out/")
     checkpoint_dir = Path(
-        r"/mnt/c/AudioTest/model_test/2.in_model/[mydesk][test]DCCRN_1225_sisdr_dnsdrb_half_16k/checkpoints/"
+        r"/home/featurize/train_output/models/[server][full]DCCRN_1227_sisdr+mse_dnsdrb_half_hamming_rts_pre40ms/checkpoints/"
     )
     # in_wav_list = list(
     #     Path(r"/home/featurize/data/from_lzf/evaluation_data/4.reverb_speech/").glob(
@@ -61,14 +61,14 @@ if __name__ == "__main__":
     #     )
     # )
     in_wav_list = [
-        # r"/mnt/c/AudioTest/model_test/1.in_data/input.wav",
-        r"/mnt/c/AudioTest/model_test/1.in_data/中会议室_女声_降噪去混响测试.wav",
-        r"/mnt/c/AudioTest/model_test/1.in_data/小会议室_女声_降噪去混响测试.wav",
-        r"/mnt/c/AudioTest/model_test/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启.wav",
-        r"/mnt/c/AudioTest/model_test/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启_mic1.wav",
-        # r"/mnt/c/AudioTest/model_test/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut00.wav",
-        # r"/mnt/c/AudioTest/model_test/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut11.wav",
-        # r"/mnt/c/AudioTest/model_test/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut22.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/input.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/中会议室_女声_降噪去混响测试.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/小会议室_女声_降噪去混响测试.wav",
+        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启_mic1.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut00.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut11.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut22.wav",
     ]
     ############ configuration end ############
 

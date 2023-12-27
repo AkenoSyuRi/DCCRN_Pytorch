@@ -135,9 +135,9 @@ class WMPLoss(nn.Module):  # weighted phase magnitude loss
         return loss
 
 
-def mse_loss(preds: torch.Tensor, target: torch.Tensor):
-    win_len, win_inc = 1024, 256
-    window = torch.hann_window(win_len, device=preds.device)
+def high_band_mse_loss(preds: torch.Tensor, target: torch.Tensor):
+    win_len, win_inc = 512, 256
+    window = torch.hamming_window(win_len, device=preds.device)
 
     stft = partial(
         torch.stft,
@@ -145,21 +145,23 @@ def mse_loss(preds: torch.Tensor, target: torch.Tensor):
         hop_length=win_inc,
         win_length=win_len,
         window=window,
-        center=False,
         return_complex=True,
     )
 
     preds_stft = stft(preds)
     target_stft = stft(target)
-    preds_mag = torch.abs(preds_stft)
-    target_mag = torch.abs(target_stft)
+
+    high_band_idx = preds_stft.shape[1] // 2
+
+    preds_mag = torch.abs(preds_stft[:, high_band_idx:])
+    target_mag = torch.abs(target_stft[:, high_band_idx:])
 
     loss = F.mse_loss(preds_mag, target_mag)
     return loss
 
 
 def sisdr_mse_loss(clean_est, clean, alpha=100):
-    return sisdr_loss(clean_est, clean) + alpha * mse_loss(clean_est, clean)
+    return sisdr_loss(clean_est, clean) + alpha * high_band_mse_loss(clean_est, clean)
 
 
 class ComplexCompressedMSELoss(nn.Module):

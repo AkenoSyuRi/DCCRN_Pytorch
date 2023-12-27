@@ -15,7 +15,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-C",
         "--train_config",
-        default="configs/train_mydesk.toml",
+        default="configs/train_server.toml",
         help="train configuration",
     )
     parser.add_argument(

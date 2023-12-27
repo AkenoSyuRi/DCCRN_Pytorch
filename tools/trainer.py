@@ -11,7 +11,7 @@ from dataset import DataPrefetcher
 
 from .early_stopping import EarlyStopping
 from .initial_model import initialize_module
-from .loss_func import sisdr_loss, snr_loss, wSDRLoss
+from .loss_func import sisdr_loss, snr_loss, wSDRLoss, sisdr_mse_loss
 from .lzf_utils.time_utils import TimeUtils
 
 
@@ -161,6 +161,9 @@ class Trainer:
         )
 
     def calloss(self, wavTrue, wavPred, wavMixed, method="wSDR"):
+        if method == "sisdr+mse":
+            return sisdr_mse_loss(wavPred, wavTrue)
+
         if method == "wSDR":
             return wSDRLoss(wavMixed, wavTrue, wavPred)
 
