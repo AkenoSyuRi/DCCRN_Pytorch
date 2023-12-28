@@ -6,13 +6,12 @@ pin_memory = true
 num_epochs = 100
 batch_size = 64
 description = """[1227 dnsdrb][server][full]
-1) 16k, win_len=512, win_inc=256;
-2) use sisdr+mse loss, rts 0.3 pre 40ms;
+2) use wSDR loss, rts 0.15 pre 40ms;
 3) load weights from mydesk 1225 epoch 71;
 """
 # set experiment dir.
 save_model_dir = "/home/featurize/train_output/models"
-experiment_name = "[server][full]DCCRN_1227_sisdr+mse_dnsdrb_half_hamming_rts_pre40ms"
+experiment_name = "[server][full]DCCRN_1227_wSDR_dnsdrb_half_hamming_rts_0.15"
 # set preload model
 preload_model_path = "/home/featurize/train_output/transfer_station/model_0071.pth"
 
@@ -62,10 +61,10 @@ kernel_size = 5
 kernel_num = [16, 32, 64, 128, 256, 256]
 
 [loss]
-method = "sisdr+mse"
+# method = "sisdr+mse"
 # method = "sisdr"
 # method = "snr"
-# method = "wSDR"
+method = "wSDR"
 
 [optimizer]
 lr = 1e-3

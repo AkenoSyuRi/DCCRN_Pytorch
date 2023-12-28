@@ -50,10 +50,10 @@ if __name__ == "__main__":
         model_index_ranges,
         device,
         out_input,
-    ) = (512, 256, 16000, 20, "cpu", bool(0))
+    ) = (512, 256, 16000, 34, "cpu", bool(0))
     out_wav_base_dir = Path(r"/home/featurize/train_output/enhanced/out/")
     checkpoint_dir = Path(
-        r"/home/featurize/train_output/models/[server][full]DCCRN_1227_sisdr+mse_dnsdrb_half_hamming_rts_pre40ms/checkpoints/"
+        r"/home/featurize/train_output/models/[server][full]DCCRN_1227_wSDR_dnsdrb_half_hamming_rts_0.15/checkpoints/"
     )
     # in_wav_list = list(
     #     Path(r"/home/featurize/data/from_lzf/evaluation_data/4.reverb_speech/").glob(
