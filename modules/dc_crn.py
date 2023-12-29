@@ -366,6 +366,7 @@ if __name__ == "__main__":
         win_len=512,
         win_inc=256,
         fft_len=512,
+        kernel_num=[16, 32],
     )
     _, outputs = net(inputs)
     loss = net.loss(outputs, labels, loss_mode="SI-SNR")

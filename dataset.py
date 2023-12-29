@@ -132,8 +132,8 @@ def get_rts_rir(
     sr,
     *,
     original_T60: float = 1.0,
-    target_T60=0.15,
-    direct_range=(-0.001, 0.04),
+    target_T60=0.45,
+    direct_range=(-0.001, 0.02),
 ):
     assert rir.ndim == 1, "rir must be a 1D array."
 
@@ -249,20 +249,20 @@ def audio_mix(
 
         noisy = clean_echoic + noise_data
         label = label_echoic
-    elif add_clean and add_noise:
-        factor = compute_scale_by_snr(clean_data, noise_data, snr, eps)
-        clean_data *= factor
+    # elif add_clean and add_noise:
+    #     factor = compute_scale_by_snr(clean_data, noise_data, snr, eps)
+    #     clean_data *= factor
 
-        noisy = clean_data + noise_data
-        label = clean_data
-    elif add_clean and add_rir:
-        noisy, label = add_reverb(clean_data, rir_data)
-    elif add_clean:
-        noisy = clean_data
-        label = noisy.copy()
-    elif add_noise:
-        noisy = noise_data
-        label = np.zeros_like(noisy)
+    #     noisy = clean_data + noise_data
+    #     label = clean_data
+    # elif add_clean and add_rir:
+    #     noisy, label = add_reverb(clean_data, rir_data)
+    # elif add_clean:
+    #     noisy = clean_data
+    #     label = noisy.copy()
+    # elif add_noise:
+    #     noisy = noise_data
+    #     label = np.zeros_like(noisy)
     else:
         raise NotImplementedError
 

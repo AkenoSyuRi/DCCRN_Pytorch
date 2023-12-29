@@ -1,26 +1,25 @@
 [meta]
-seed = 125
+seed = 126
 use_amp = false
 num_workers = 14
 pin_memory = true
 num_epochs = 100
 batch_size = 64
-description = """[1227 dnsdrb][server][full]
-2) use wSDR loss, rts 0.15 pre 40ms;
-3) load weights from mydesk 1225 epoch 71;
+description = """[1228 dnsdrb][server][full]
+1) use sisdr+mse loss, rts 0.45 pre 20ms, kernel_num=[16,32];
 """
 # set experiment dir.
 save_model_dir = "/home/featurize/train_output/models"
-experiment_name = "[server][full]DCCRN_1227_wSDR_dnsdrb_half_hamming_rts_0.15"
+experiment_name = "[server][full]DCCRN_1228_sisdr+mse_dnsdrb_half_hamming_rts_0.45_pre20ms"
 # set preload model
-preload_model_path = "/home/featurize/train_output/transfer_station/model_0071.pth"
+preload_model_path = ""
 
 [dataset]
 samplerate = 16000
 duration = 10
 snr_range = [-5, 40, 1] # *_range: start, stop, step
 scale_range = [0.20, 0.99, 0.01]
-valid_sizes = [1024, 300, 1024] # valid size for: clean, noise, RIR
+valid_sizes = [1024, 1024, 1024] # valid size for: clean, noise, RIR
 clean_dir_list = [
     "/home/featurize/data/from_lzf/train_data_32k/clean/dns_clean_32k",
     "/home/featurize/data/from_lzf/train_data_32k/clean/NEW_AISHELL3_data_cat",
@@ -28,7 +27,7 @@ clean_dir_list = [
     "/home/featurize/data/from_lzf/train_data_32k/clean/anechoic_room_lzf_speech_augmented",
 ]
 noise_dir_list = [
-    # "/home/featurize/data/from_lzf/train_data_32k/noise/dns_noise_fullband",
+    "/home/featurize/data/from_lzf/train_data_32k/noise/dns_noise_fullband",
     "/home/featurize/data/from_lzf/train_data_32k/noise/ESC-50",
     # "/home/featurize/data/from_lzf/train_data_32k/noise/DEMAND_dataset_32k",
     # "/home/featurize/data/from_lzf/train_data_32k/noise/youtube_air_conditioner_cut_200",
@@ -58,13 +57,13 @@ masking_mode = "E"
 use_clstm = false
 use_cbn = false
 kernel_size = 5
-kernel_num = [16, 32, 64, 128, 256, 256]
+kernel_num = [16, 32]
 
 [loss]
-# method = "sisdr+mse"
+method = "sisdr+mse"
 # method = "sisdr"
 # method = "snr"
-method = "wSDR"
+# method = "wSDR"
 
 [optimizer]
 lr = 1e-3

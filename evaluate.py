@@ -46,14 +46,15 @@ if __name__ == "__main__":
     (
         frame_len,
         frame_hop,
+        kernel_num,
         g_sr,
         model_index_ranges,
         device,
         out_input,
-    ) = (512, 256, 16000, 34, "cpu", bool(0))
+    ) = (512, 256, [16, 32], 16000, 71, "cuda", bool(0))
     out_wav_base_dir = Path(r"/home/featurize/train_output/enhanced/out/")
     checkpoint_dir = Path(
-        r"/home/featurize/train_output/models/[server][full]DCCRN_1227_wSDR_dnsdrb_half_hamming_rts_0.15/checkpoints/"
+        r"/home/featurize/train_output/models/[server][full]DCCRN_1228_sisdr+mse_dnsdrb_half_hamming_rts_0.45_pre20ms/checkpoints/"
     )
     # in_wav_list = list(
     #     Path(r"/home/featurize/data/from_lzf/evaluation_data/4.reverb_speech/").glob(
@@ -62,13 +63,10 @@ if __name__ == "__main__":
     # )
     in_wav_list = [
         # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/input.wav",
-        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/中会议室_女声_降噪去混响测试.wav",
-        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/小会议室_女声_降噪去混响测试.wav",
+        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/中会议室_女声_降噪去混响测试.wav",
+        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/小会议室_女声_降噪去混响测试.wav",
         r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启.wav",
-        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启_mic1.wav",
-        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut00.wav",
-        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut11.wav",
-        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/TB5W_工厂大会议室_去混响+非稳态降噪演示_cut22.wav",
+        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启_mic1.wav",
     ]
     ############ configuration end ############
 
@@ -81,6 +79,7 @@ if __name__ == "__main__":
             win_len=frame_len,
             win_inc=frame_hop,
             fft_len=frame_len,
+            kernel_num=kernel_num,
         ).to(device)
         net.load_state_dict(torch.load(ckpt_path, device))
         net.eval()
