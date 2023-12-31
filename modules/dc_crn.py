@@ -159,7 +159,7 @@ class DCCRN(nn.Module):
                     )
                 )
 
-        show_model(self)
+        # show_model(self)
         show_params(self)
         self.flatten_parameters()
 

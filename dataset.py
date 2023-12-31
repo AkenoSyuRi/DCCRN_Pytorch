@@ -132,7 +132,7 @@ def get_rts_rir(
     sr,
     *,
     original_T60: float = 1.0,
-    target_T60=0.45,
+    target_T60=0.3,
     direct_range=(-0.001, 0.02),
 ):
     assert rir.ndim == 1, "rir must be a 1D array."
@@ -155,7 +155,7 @@ def get_rts_rir(
 
 
 def get_decayed_and_attenuated_rir(
-    rir, sr, *, direct_range=(-0.001, 0.02), rd=0.2, t1=0.03, alpha=0.4
+    rir, sr, *, direct_range=(-0.001, 0.02), rd=0.3, t1=0.04, alpha=0.5
 ):
     # get decayed and attenuated function
     t = np.arange((len(rir)))

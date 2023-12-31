@@ -34,9 +34,16 @@ def enhance(
     out_wav_dir: Path,
     out_input: bool,
 ):
+    def get_experiment_name():
+        res = checkpoint_dir.parent.name
+        res = res[res.rfind("]") + 1 :]
+        return res
+
     out_wav_dir.mkdir(parents=True, exist_ok=True)
     for in_f in map(Path, in_wav_list):
-        out_f = out_wav_dir.joinpath(in_f.stem + f"_ep{idx:03}" + in_f.suffix)
+        out_f = out_wav_dir.joinpath(
+            in_f.stem + ";" + get_experiment_name() + f"_ep{idx:03}" + in_f.suffix
+        )
         enchance_one(net, in_f, out_f, out_input=out_input)
     ...
 
@@ -51,10 +58,10 @@ if __name__ == "__main__":
         model_index_ranges,
         device,
         out_input,
-    ) = (512, 256, [16, 32], 16000, 71, "cuda", bool(0))
+    ) = (512, 256, [16, 32], 16000, 97, "cuda", bool(0))
     out_wav_base_dir = Path(r"/home/featurize/train_output/enhanced/out/")
     checkpoint_dir = Path(
-        r"/home/featurize/train_output/models/[server][full]DCCRN_1228_sisdr+mse_dnsdrb_half_hamming_rts_0.45_pre20ms/checkpoints/"
+        r"/home/featurize/train_output/models/[server][full]DCCRN_1230_sisdr_dnsdrb_half_hamming_rts_0.3_pre20ms/checkpoints"
     )
     # in_wav_list = list(
     #     Path(r"/home/featurize/data/from_lzf/evaluation_data/4.reverb_speech/").glob(
