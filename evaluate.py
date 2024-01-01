@@ -53,15 +53,16 @@ if __name__ == "__main__":
     (
         frame_len,
         frame_hop,
+        masking_mode,
         kernel_num,
         g_sr,
         model_index_ranges,
         device,
         out_input,
-    ) = (512, 256, [16, 32], 16000, 96, "cuda", bool(1))
+    ) = (512, 256, "R", [16, 32, 64], 16000, 10, "cpu", bool(0))
     out_wav_base_dir = Path(r"/home/featurize/train_output/enhanced/out/")
     checkpoint_dir = Path(
-        r"/home/featurize/train_output/models/[server][full]DCCRN_1231_sisdr_dnsdrb_half_hamming_causal/checkpoints/"
+        r"/home/featurize/train_output/models/[server][full]DCCRN_0101_sisdr_dnsdrb_half_hamming_3kernel_maskingR/checkpoints/"
     )
     # in_wav_list = list(
     #     Path(r"/home/featurize/data/from_lzf/evaluation_data/4.reverb_speech/").glob(
@@ -86,6 +87,7 @@ if __name__ == "__main__":
             win_len=frame_len,
             win_inc=frame_hop,
             fft_len=frame_len,
+            masking_mode=masking_mode,
             kernel_num=kernel_num,
         ).to(device)
         net.load_state_dict(torch.load(ckpt_path, device))

@@ -4,7 +4,6 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchaudio
 
 sys.path.append(Path(__file__).absolute().parent.as_posix())
 from complexnn import (
@@ -31,7 +30,7 @@ class DCCRN(nn.Module):
         use_clstm=False,
         use_cbn=False,
         kernel_size=5,
-        kernel_num=[16, 32, 64, 128, 256, 256],
+        kernel_num=(16, 32, 64, 128, 256, 256),
     ):
         """
 
@@ -58,7 +57,7 @@ class DCCRN(nn.Module):
         self.kernel_size = kernel_size
         # self.kernel_num = [2, 8, 16, 32, 128, 128, 128]
         # self.kernel_num = [2, 16, 32, 64, 128, 256, 256]
-        self.kernel_num = [2] + kernel_num
+        self.kernel_num = [2] + list(kernel_num)
         self.masking_mode = masking_mode
         self.use_clstm = use_clstm
 
@@ -122,7 +121,7 @@ class DCCRN(nn.Module):
                 bidirectional=bidirectional,
                 batch_first=False,
             )
-            self.tranform = nn.Linear(
+            self.transform = nn.Linear(
                 self.rnn_units * fac, hidden_dim * self.kernel_num[-1]
             )
 
@@ -218,7 +217,7 @@ class DCCRN(nn.Module):
             # to [L, B, C, D]
             out = torch.reshape(out, [lengths, batch_size, channels * dims])
             out, _ = self.enhance(out)
-            out = self.tranform(out)
+            out = self.transform(out)
             out = torch.reshape(out, [lengths, batch_size, channels, dims])
 
         out = out.permute(1, 2, 3, 0)
@@ -369,7 +368,8 @@ if __name__ == "__main__":
         win_len=512,
         win_inc=256,
         fft_len=512,
-        kernel_num=[16, 32],
+        masking_mode="R",
+        kernel_num=[16, 32, 64],
     )
     torchinfo.summary(net, input_size=(3, 16000 * 10), device="cpu")
     _, outputs = net(inputs)

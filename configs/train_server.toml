@@ -1,16 +1,16 @@
 [meta]
-seed = 128
+seed = 129
 use_amp = false
 num_workers = 14
 pin_memory = true
 num_epochs = 100
 batch_size = 128
-description = """[1231 dnsdrb][server][full]
-1) modify the network definition, convtranspose2d to no padding; stft persistent=False;
+description = """[0101 dnsdrb][server][full]
+1) kernel_num=[16,32,64], masking_mode=R;
 """
 # set experiment dir.
 save_model_dir = "/home/featurize/train_output/models"
-experiment_name = "[server][full]DCCRN_1231_sisdr_dnsdrb_half_hamming_causal"
+experiment_name = "[server][full]DCCRN_0101_sisdr_dnsdrb_half_hamming_3kernel_maskingR"
 # set preload model
 preload_model_path = ""
 
@@ -53,11 +53,11 @@ win_len = 512
 win_inc = 256
 fft_len = 512
 win_type = "hamming"
-masking_mode = "E"
+masking_mode = "R"
 use_clstm = false
 use_cbn = false
 kernel_size = 5
-kernel_num = [16, 32]
+kernel_num = [16, 32, 64]
 
 [loss]
 # method = "sisdr+mse"
