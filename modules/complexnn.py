@@ -199,7 +199,7 @@ class ComplexConvTranspose2d(nn.Module):
         stride=(1, 1),
         padding=(0, 0),
         output_padding=(0, 0),
-        causal=False,
+        causal=True,
         complex_axis=1,
         groups=1,
     ):
@@ -213,6 +213,7 @@ class ComplexConvTranspose2d(nn.Module):
         self.kernel_size = kernel_size
         self.stride = stride
         self.padding = padding
+        self.causal = causal
         self.output_padding = output_padding
         self.groups = groups
 
@@ -221,7 +222,7 @@ class ComplexConvTranspose2d(nn.Module):
             self.out_channels,
             kernel_size,
             self.stride,
-            padding=self.padding,
+            padding=[self.padding[0], self.kernel_size[1] - 1],
             output_padding=output_padding,
             groups=self.groups,
         )
@@ -230,7 +231,7 @@ class ComplexConvTranspose2d(nn.Module):
             self.out_channels,
             kernel_size,
             self.stride,
-            padding=self.padding,
+            padding=[self.padding[0], self.kernel_size[1] - 1],
             output_padding=output_padding,
             groups=self.groups,
         )
@@ -242,11 +243,11 @@ class ComplexConvTranspose2d(nn.Module):
         nn.init.constant_(self.imag_conv.bias, 0.0)
 
     def forward(self, inputs):
-        if isinstance(inputs, torch.Tensor):
-            real, imag = torch.chunk(inputs, 2, self.complex_axis)
-        elif isinstance(inputs, tuple) or isinstance(inputs, list):
-            real = inputs[0]
-            imag = inputs[1]
+        if self.padding[1] != 0 and self.causal:
+            inputs = F.pad(inputs, [self.padding[1], 0, 0, 0])
+        else:
+            inputs = F.pad(inputs, [self.padding[1], self.padding[1], 0, 0])
+
         if self.complex_axis == 0:
             real = self.real_conv(inputs)
             imag = self.imag_conv(inputs)

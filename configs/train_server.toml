@@ -1,16 +1,16 @@
 [meta]
-seed = 127
+seed = 128
 use_amp = false
 num_workers = 14
 pin_memory = true
 num_epochs = 100
 batch_size = 128
-description = """[1230 dnsdrb][server][full]
-1) use sisdr loss; use rts 0.3 pre 20ms; kernel_num=[16,32];
+description = """[1231 dnsdrb][server][full]
+1) modify the network definition, convtranspose2d to no padding; stft persistent=False;
 """
 # set experiment dir.
 save_model_dir = "/home/featurize/train_output/models"
-experiment_name = "[server][full]DCCRN_1230_sisdr_dnsdrb_half_hamming_rts_0.3_pre20ms"
+experiment_name = "[server][full]DCCRN_1231_sisdr_dnsdrb_half_hamming_causal"
 # set preload model
 preload_model_path = ""
 

@@ -46,7 +46,7 @@ class ConvSTFT(nn.Module):
 
         kernel, _ = init_kernels(win_len, win_inc, self.fft_len, win_type)
         # self.weight = nn.Parameter(kernel, requires_grad=(not fix))
-        self.register_buffer("weight", kernel)
+        self.register_buffer("weight", kernel, persistent=False)
         self.feature_type = feature_type
         self.stride = win_inc
         self.win_len = win_len
@@ -88,15 +88,15 @@ class ConviSTFT(nn.Module):
             win_len, win_inc, self.fft_len, win_type, invers=True
         )
         # self.weight = nn.Parameter(kernel, requires_grad=(not fix))
-        self.register_buffer("weight", kernel)
+        self.register_buffer("weight", kernel, persistent=False)
         self.feature_type = feature_type
         self.win_type = win_type
         self.win_len = win_len
         self.stride = win_inc
         self.stride = win_inc
         self.dim = self.fft_len
-        self.register_buffer("window", window)
-        self.register_buffer("enframe", torch.eye(win_len)[:, None, :])
+        self.register_buffer("window", window, persistent=False)
+        self.register_buffer("enframe", torch.eye(win_len)[:, None, :], persistent=False)
 
     def forward(self, inputs, phase=None):
         """

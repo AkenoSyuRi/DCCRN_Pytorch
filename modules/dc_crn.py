@@ -135,7 +135,7 @@ class DCCRN(nn.Module):
                             self.kernel_num[idx - 1],
                             kernel_size=(self.kernel_size, 2),
                             stride=(2, 1),
-                            padding=(2, 0),
+                            padding=(2, 1),
                             output_padding=(1, 0),
                         ),
                         nn.BatchNorm2d(self.kernel_num[idx - 1])
@@ -153,7 +153,7 @@ class DCCRN(nn.Module):
                             self.kernel_num[idx - 1],
                             kernel_size=(self.kernel_size, 2),
                             stride=(2, 1),
-                            padding=(2, 0),
+                            padding=(2, 1),
                             output_padding=(1, 0),
                         ),
                     )
@@ -172,9 +172,9 @@ class DCCRN(nn.Module):
         real = specs[:, : self.fft_len // 2 + 1]
         imag = specs[:, self.fft_len // 2 + 1 :]
         spec_mags = torch.sqrt(real**2 + imag**2 + 1e-8)
-        spec_mags = spec_mags
+        # spec_mags = spec_mags
         spec_phase = torch.atan2(imag, real)
-        spec_phase = spec_phase
+        # spec_phase = spec_phase
         cspecs = torch.stack([real, imag], 1)
         cspecs = cspecs[:, :, 1:]
         """
@@ -226,8 +226,9 @@ class DCCRN(nn.Module):
         for idx in range(len(self.decoder)):
             out = complex_cat([out, encoder_out[-1 - idx]], 1)
             out = self.decoder[idx](out)
-            out = out[..., 1:]
-        #    print('decoder', out.size())
+            # out = out[..., 1:]
+            # print('decoder', out.size())
+            ...
         mask_real = out[:, 0]
         mask_imag = out[:, 1]
         mask_real = F.pad(mask_real, [0, 0, 1, 0])
@@ -336,10 +337,12 @@ def si_snr(s1, s2, eps=1e-8):
 
 
 if __name__ == "__main__":
+    import torchinfo
+
     torch.manual_seed(10)
     torch.autograd.set_detect_anomaly(True)
-    inputs = torch.randn([10, 16000 * 10]).clamp_(-1, 1)
-    labels = torch.randn([10, 16000 * 10]).clamp_(-1, 1)
+    inputs = torch.randn([3, 16000 * 10]).clamp_(-1, 1)
+    labels = torch.randn([3, 16000 * 10]).clamp_(-1, 1)
 
     """
     # DCCRN-E
@@ -368,32 +371,7 @@ if __name__ == "__main__":
         fft_len=512,
         kernel_num=[16, 32],
     )
+    torchinfo.summary(net, input_size=(3, 16000 * 10), device="cpu")
     _, outputs = net(inputs)
     loss = net.loss(outputs, labels, loss_mode="SI-SNR")
-    print(loss)
-
-if __name__ == "0__main__":
-    torch.set_grad_enabled(False)
-    in_pt_path = r"/home/featurize/train_output/models/[server][test]DCCRN_1116_sisdr_drb_half_rts0.07/checkpoints/model_0098.pth"
-    in_wav_path = r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启.wav"
-    out_wav_path = Path(
-        r"/home/featurize/train_output/enhanced",
-        f"{Path(in_wav_path).stem};{Path(in_pt_path).stem}.wav",
-    )
-
-    net = DCCRN(
-        win_len=512,
-        win_inc=256,
-        fft_len=512,
-    )
-
-    net.load_state_dict(torch.load(in_pt_path, "cpu"))
-    net.eval()
-
-    inputs, sr = torchaudio.load(in_wav_path)
-
-    _, output = net.forward(inputs)
-
-    torchaudio.save(out_wav_path, output, sr)
-    print(out_wav_path)
-    ...
+    print(loss, inputs.size(), outputs.size())
