@@ -116,7 +116,7 @@ class DCCRN(nn.Module):
             self.enhance = nn.LSTM(
                 input_size=hidden_dim * self.kernel_num[-1],
                 hidden_size=self.rnn_units,
-                num_layers=2,
+                num_layers=self.hidden_layers,
                 dropout=0.0,
                 bidirectional=bidirectional,
                 batch_first=False,
@@ -365,11 +365,12 @@ if __name__ == "__main__":
     """
     # DCCRN-CL
     net = DCCRN(
+        rnn_units=128,
         win_len=512,
         win_inc=256,
         fft_len=512,
         masking_mode="R",
-        kernel_num=[16, 32, 64],
+        kernel_num=[8, 16],
     )
     torchinfo.summary(net, input_size=(3, 16000 * 10), device="cpu")
     _, outputs = net(inputs)

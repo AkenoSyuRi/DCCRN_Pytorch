@@ -1,16 +1,16 @@
 [meta]
-seed = 129
+seed = 130
 use_amp = false
 num_workers = 14
 pin_memory = true
 num_epochs = 100
 batch_size = 128
-description = """[0101 dnsdrb][server][full]
-1) kernel_num=[16,32,64], masking_mode=R;
+description = """[0103 dnsdrb][server][full]
+1) kernel_num=[8,16], rnn_units=128;
 """
 # set experiment dir.
 save_model_dir = "/home/featurize/train_output/models"
-experiment_name = "[server][full]DCCRN_0101_sisdr_dnsdrb_half_hamming_3kernel_maskingR"
+experiment_name = "[server][full]DCCRN_0103_sisdr_dnsdrb_half_hamming_2kernel_128u"
 # set preload model
 preload_model_path = ""
 
@@ -57,7 +57,7 @@ masking_mode = "R"
 use_clstm = false
 use_cbn = false
 kernel_size = 5
-kernel_num = [16, 32, 64]
+kernel_num = [8, 16]
 
 [loss]
 # method = "sisdr+mse"

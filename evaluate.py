@@ -51,6 +51,7 @@ def enhance(
 if __name__ == "__main__":
     ############ configuration start ############
     (
+        rnn_units,
         frame_len,
         frame_hop,
         masking_mode,
@@ -59,22 +60,18 @@ if __name__ == "__main__":
         model_index_ranges,
         device,
         out_input,
-    ) = (512, 256, "R", [16, 32, 64], 16000, 10, "cpu", bool(0))
+    ) = (128, 512, 256, "R", [8, 16], 16000, 28, "cuda", bool(0))
     out_wav_base_dir = Path(r"/home/featurize/train_output/enhanced/out/")
     checkpoint_dir = Path(
-        r"/home/featurize/train_output/models/[server][full]DCCRN_0101_sisdr_dnsdrb_half_hamming_3kernel_maskingR/checkpoints/"
+        r"/home/featurize/train_output/models/[server][full]DCCRN_0103_sisdr_dnsdrb_half_hamming_2kernel_128u/checkpoints"
     )
-    # in_wav_list = list(
-    #     Path(r"/home/featurize/data/from_lzf/evaluation_data/4.reverb_speech/").glob(
-    #         "*.wav"
-    #     )
-    # )
     in_wav_list = [
         # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/input.wav",
-        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/中会议室_女声_降噪去混响测试.wav",
-        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/小会议室_女声_降噪去混响测试.wav",
-        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启.wav",
-        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启_mic1.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/中会议室_女声_降噪去混响测试.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/小会议室_女声_降噪去混响测试.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启.wav",
+        # r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/大会议室_男声_降噪去混响测试_RK降噪开启_mic1.wav",
+        r"/home/featurize/data/from_lzf/evaluation_data/1.in_data/large_meeting_room_input.wav",
     ]
     ############ configuration end ############
 
@@ -84,6 +81,7 @@ if __name__ == "__main__":
     for idx in range(*model_index_ranges):
         ckpt_path = checkpoint_dir.joinpath(f"model_{idx:04}.pth")
         net = Model(
+            rnn_units=rnn_units,
             win_len=frame_len,
             win_inc=frame_hop,
             fft_len=frame_len,
